@@ -1,29 +1,43 @@
-import { createClient } from '@supabase/supabase-js'
+import { supabase } from "@/lib/supabase"
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+// =================
+// GET STATUS POMPA
+// =================
 
 export async function GET() {
 
-  const { data } = await supabase
-    .from('pump_control')
-    .select('*')
-    .eq('id',1)
+  const { data, error } = await supabase
+    .from("pump_control")
+    .select("status")
+    .eq("id", 1)
     .single()
+
+  if (error) {
+    console.log(error)
+    return Response.json({ error })
+  }
 
   return Response.json(data)
 }
+
+
+// =================
+// UPDATE STATUS
+// =================
 
 export async function POST(req: Request) {
 
   const body = await req.json()
 
-  await supabase
-    .from('pump_control')
+  const { error } = await supabase
+    .from("pump_control")
     .update({ status: body.status })
-    .eq('id',1)
+    .eq("id", 1)
 
-  return Response.json({success:true})
+  if (error) {
+    console.log(error)
+    return Response.json({ error })
+  }
+
+  return Response.json({ success: true })
 }

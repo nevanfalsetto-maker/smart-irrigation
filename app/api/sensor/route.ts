@@ -1,9 +1,4 @@
-import { createClient } from '@supabase/supabase-js'
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+import { supabase } from "@/lib/supabase"
 
 export async function POST(req: Request) {
 
@@ -12,15 +7,18 @@ export async function POST(req: Request) {
   const { nilai, status, status_pompa, battery } = body
 
   const { error } = await supabase
-    .from('soil_system')
-    .insert({
-      nilai,
-      status,
-      status_pompa,
-      battery
-    })
+    .from("soil_system")
+    .insert([
+      {
+        nilai,
+        status,
+        status_pompa,
+        battery
+      }
+    ])
 
   if (error) {
+    console.log(error)
     return Response.json({ error })
   }
 
