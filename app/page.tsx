@@ -108,17 +108,16 @@ const getData = async () => {
   }
 
   const getBatteryColor = (v: number) => {
-    if (v >= 3.7) return '#16a34a'
-    if (v >= 3.4) return '#d97706'
+     if (v >= 12.4) return '#22c55e' // Hijau (Aki Sehat)
+    if (v >= 11.5) return '#eab308' // Kuning (Waspada)
     return '#dc2626'
   }
 
   const getBatteryWidth = (v: number) => {
-    // Asumsi range baterai 3.0V - 4.2V
-    const pct = ((v - 3.0) / (4.2 - 3.0)) * 100
+    // Range Aki 12V: 11.0V (Kosong) - 12.6V (Penuh)
+    const pct = ((v - 11.0) / (12.6 - 11.0)) * 100
     return `${Math.min(100, Math.max(0, pct))}%`
   }
-
   const soilStyle = getSoilStyle(data?.status ?? '')
 
   return (
